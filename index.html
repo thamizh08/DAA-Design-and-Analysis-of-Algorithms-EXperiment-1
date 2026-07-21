@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interpolation Search Visualizer</title>
+
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#d062ee,#c94edc,#8f2f9e);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+.container{
+    width:700px;
+    background:rgba(194, 4, 232, 0.918);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 40px rgba(216, 127, 38, 0.888);
+}
+h1{text-align:center;
+    color :#00d4ff}
+input{
+    width:150px;
+    padding:10px;
+    font-size:18px;
+    border-radius:8px;
+    border:none;
+}
+button{
+    padding:10px 20px;
+    background:#00d4ff;
+    border:none;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+}
+button:hover{transform:scale(1.05);}
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#111111;
+    border-radius:10px;
+}
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+table,th,td{
+    border:1px solid white;
+}
+th,td{
+    padding:10px;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>INTERPOLATION SEARCH</h1>
+
+<p><b>ELEMENTS OF THE ARRAY:</b> </p>
+<p>2,5,10,15,23,35,48,60,75,90,105,120</p>
+
+<input type="number" id="target" placeholder="Enter Target">
+<button onclick="search()">Search</button>
+
+<div class="result" id="output">
+Result Terminal
+</div>
+
+<table>
+<tr>
+<th>Algorithm</th>
+<th>Comparisons</th>
+</tr>
+<tr>
+<td>INTERPOLATION SEARCH</td>
+<td id="comp">0</td>
+</tr>
+</table>
+
+</div>
+
+<script>
+let arr=[2,5,10,15,23,35,48,60,75,90,105,120];
+
+function interpolationSearch(arr,target){
+    let low=0;
+    let high=arr.length-1;
+    let comparisons=0;
+
+    while(low<=high && target>=arr[low] && target<=arr[high]){
+        comparisons++;
+
+        if(low===high){
+            if(arr[low]===target)
+                return {index:low,comparisons:comparisons};
+            break;
+        }
+
+        let pos=low+Math.floor(((target-arr[low])*(high-low))/(arr[high]-arr[low]));
+
+        if(arr[pos]===target)
+            return {index:pos,comparisons:comparisons};
+
+        if(arr[pos]<target)
+            low=pos+1;
+        else
+            high=pos-1;
+    }
+
+    return {index:-1,comparisons:comparisons};
+}
+
+function search(){
+    let target=parseInt(document.getElementById("target").value);
+    let result=interpolationSearch(arr,target);
+
+    if(result.index==-1){
+        document.getElementById("output").innerHTML="<h2 style='color:red'>Element Not Found</h2>";
+    }else{
+        document.getElementById("output").innerHTML=
+        "<h2 style='color:lightgreen'>Element Found</h2>"+
+        "<p><b>Index:</b> "+result.index+"</p>"+
+        "<p><b>Comparisons:</b> "+result.comparisons+"</p>";
+    }
+
+    document.getElementById("comp").innerHTML=result.comparisons;
+}
+</script>
+
+</body>
+</html>
